@@ -18,7 +18,7 @@ var Component = _react.Component;
 
 var isInitialized = false;
 
-function addScript(id) {
+function addScript(id, userId) {
 	if (!id) {
 		throw new Error("Google analytics ID is undefined");
 	}
@@ -35,7 +35,11 @@ function addScript(id) {
 		}, i[r].l = 1 * new Date();a = s.createElement(o), m = s.getElementsByTagName(o)[0];a.async = 1;a.src = g;m.parentNode.insertBefore(a, m);
 	})(window, document, "script", "//www.google-analytics.com/analytics.js", "ga");
 
-	window.ga("create", id, "auto");
+	if (userId) {
+		window.ga("create", id, { userId: userId });
+	} else {
+		window.ga("create", id, "auto");
+	}
 }
 
 var GoogleAnalytics = (function (_Component) {
@@ -54,7 +58,7 @@ var GoogleAnalytics = (function (_Component) {
 	_createClass(GoogleAnalytics, {
 		componentDidMount: {
 			value: function componentDidMount() {
-				GoogleAnalytics.init(this.props.id);
+				GoogleAnalytics.init(this.props.id, this.props.userId);
 
 				this.setState({
 					isClientReady: true
@@ -92,9 +96,9 @@ var GoogleAnalytics = (function (_Component) {
 		}
 	}, {
 		init: {
-			value: function init(id) {
+			value: function init(id, userId) {
 				if (!isInitialized) {
-					addScript(id);
+					addScript(id, userId);
 				}
 			}
 		},
@@ -127,12 +131,14 @@ module.exports = GoogleAnalytics;
 GoogleAnalytics.propTypes = {
 	id: React.PropTypes.string.isRequired,
 	displayfeatures: React.PropTypes.bool,
-	pageview: React.PropTypes.bool
+	pageview: React.PropTypes.bool,
+	userId: React.PropTypes.string
 };
 
 GoogleAnalytics.defaultProps = {
 	displayfeatures: false,
-	pageview: false
+	pageview: false,
+	userId: null
 };
 
 GoogleAnalytics.contextTypes = {
