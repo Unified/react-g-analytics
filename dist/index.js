@@ -36,10 +36,10 @@ function addScript(id, userId) {
 	})(window, document, "script", "//www.google-analytics.com/analytics.js", "ga");
 
 	if (userId) {
-		window.ga("set", "&uid", userId);
+		window.ga("create", id, { userId: userId });
+	} else {
+		window.ga("create", id, "auto");
 	}
-
-	window.ga("create", id, "auto");
 }
 
 var GoogleAnalytics = (function (_Component) {
