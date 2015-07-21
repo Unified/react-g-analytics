@@ -36,10 +36,10 @@ function addScript(id, userId) {
 	})(window, document, "script", "//www.google-analytics.com/analytics.js", "ga");
 
 	if (userId) {
-		window.ga("create", id, { userId: userId });
-	} else {
-		window.ga("create", id, "auto");
+		window.ga("set", "&uid", userId);
 	}
+
+	window.ga("create", id, "auto");
 }
 
 var GoogleAnalytics = (function (_Component) {
@@ -84,7 +84,11 @@ var GoogleAnalytics = (function (_Component) {
 					throw new Error("Router is not presented in the component context.");
 				}
 
-				var path = this.context.router.getCurrentPath();
+				var url = window.location.href;
+				var startIndex = url.indexOf("app");
+				var endIndex = url.indexOf("?") !== -1 ? url.indexOf("?") : url.length;
+				var path = url.substring(startIndex, endIndex);
+
 				if (this.latestUrl === path) {
 					return;
 				}
